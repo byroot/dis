@@ -2,7 +2,7 @@
 
 require File.expand_path(File.dirname(__FILE__) + '/../lib/dis')
 
-# TODO: parse config
+Dis::Config.parse! ARGV
 
 ARGV.each do |project_file|
   require project_file

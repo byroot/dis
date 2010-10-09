@@ -9,10 +9,7 @@ module Dis
   end
   
   def self.integrate(name, &block)
-    project = Dis::Project.new(name)
-    project.init!
-    project.instance_eval(&block)
-    project.integrate!
+    Dis::Project.new(name, &block).integrate!
   end
 end
 

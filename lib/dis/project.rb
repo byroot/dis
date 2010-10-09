@@ -7,8 +7,10 @@ module Dis
     
     attr_reader :name, :notifier
     
-    def initialize(name)
+    def initialize(name, &block)
       @name = name.to_s
+      FileUtils.mkdir_p [var_path, source_path]
+      instance_eval(&block)
     end
     
     def repository(fetcher=nil, *args)
@@ -29,11 +31,6 @@ module Dis
     
     def task(kind, *args)
       tasks << Dis::Tasks.find(kind).new(self, *args)
-    end
-    
-    def init!
-      FileUtils.mkdir_p(source_path)
-      FileUtils.mkdir_p(var_path)
     end
     
     def integrate!         # for debug
