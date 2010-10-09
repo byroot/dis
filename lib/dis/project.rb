@@ -35,7 +35,7 @@ module Dis
     
     def integrate!
       lock.acquire! do       # for debug
-        if repository.fetch! or true # new commits
+        if repository.fetch! or Dis::Config.force? # new commits
           tasks.each do |task|
             notify!(task.perform!)
             task.finalize!
