@@ -33,13 +33,19 @@ module Dis
       tasks << Dis::Tasks.find(kind).new(self, *args)
     end
     
-    def integrate!         # for debug
-      if repository.fetch! or true # new commits
-        tasks.each do |task|
-          notify!(task.perform!)
-          task.finalize!
+    def integrate!
+      lock.acquire! do       # for debug
+        if repository.fetch! or true # new commits
+          tasks.each do |task|
+            notify!(task.perform!)
+            task.finalize!
+          end
         end
       end
+    end
+    
+    def lock
+      @lock || Dis::Tools::Lock.new(self)
     end
     
     def notify!(report)
