@@ -6,10 +6,14 @@ module Dis
       
       include Dis::Tools::Shell
       
+      attr_reader :logger
+      delegate :debug, :info, :warn, :error, :to => :logger
+      
       def initialize(url, path='.', options={})
         @url = url
         @path = path
         @git_dir = File.join(path, '.git')
+        @logger = options[:logger]
       end
       
       def exist?

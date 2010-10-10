@@ -5,6 +5,8 @@ module Dis
     
     include Dis::Tools::Shell
     
+    delegate :debug, :info, :warn, :error, :fatal, :to => :logger
+    
     attr_reader :name, :notifier
     
     def initialize(name, &block)
@@ -34,18 +36,25 @@ module Dis
     end
     
     def integrate!
-      lock.acquire! do       # for debug
+      lock.acquire! do
         if repository.fetch! or Dis::Config.force? # new commits
           tasks.each do |task|
+            info "perform #{task.indentifier}"
             notify!(task.perform!)
             task.finalize!
           end
+        else
+          info "No changes found since last run, break."
         end
       end
     end
     
     def lock
-      @lock || Dis::Tools::Lock.new(self)
+      @lock ||= Dis::Tools::Lock.new(self)
+    end
+    
+    def logger
+      @logger ||= Dis::Tools::Logger.new(self)
     end
     
     def notify!(report)

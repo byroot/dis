@@ -4,6 +4,8 @@ module Dis
       
       attr_reader :project
       
+      include Dis::Tools::Logger::Delegation
+      
       def initialize(project)
         @project = project
       end
@@ -12,12 +14,14 @@ module Dis
         unless File.exist?(lock_path)
         File.open(lock_path, 'w+') { |f| f << $$ }
           begin
+            info "Lock acquired (#{lock_path})"
             yield
           ensure
             File.unlink(lock_path) rescue nil
+            info "Lock released (#{lock_path})"
           end
-        else # TODO: real logger
-          puts "Project #{project.name} already in integration by another process (#{lock_path})"
+        else
+          error "Project #{project.name} already in integration by another process (#{lock_path})"
         end
       end
       

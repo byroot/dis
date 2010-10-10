@@ -4,7 +4,7 @@ module Dis
     class Git < Dis::Fetchers::Base
       
       def repository
-        @repository ||= Dis::Tools::GitRepository.new(@options[:url], @project.source_path)
+        @repository ||= Dis::Tools::GitRepository.new(@options[:url], @project.source_path, :logger => project.logger)
       end
       
       def fetch!

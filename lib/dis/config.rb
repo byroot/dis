@@ -7,6 +7,7 @@ module Dis
       
       attr_accessor_with_default :working_directory, '/tmp/dis/'
       attr_accessor_with_default :force, false
+      attr_accessor_with_default :log_level, 0
       alias_method :force?, :force
       
       def parser

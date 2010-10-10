@@ -6,7 +6,7 @@ module Dis
       def find(name)
         const_get(name.to_s.camelize)
       end
-    
+      
     end
   
     class Base

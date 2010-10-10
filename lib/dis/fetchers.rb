@@ -11,6 +11,8 @@ module Dis
     
     class Base
       
+      attr_reader :project
+      
       def initialize(project, options={})
         @project = project
         @options = options
