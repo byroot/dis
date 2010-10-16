@@ -11,6 +11,8 @@ module Dis
   
     class Base
       
+      include Dis::Tools::Logger::Delegation
+      
       attr_reader :project, :options
       
       def initialize(project, options={})

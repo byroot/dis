@@ -7,6 +7,7 @@ module Dis
       
       attr_accessor_with_default :working_directory, '/tmp/dis/'
       attr_accessor_with_default :force, false
+      attr_accessor_with_default(:log_directory) { @log_directory ||= File.join(working_directory, 'log') }
       attr_accessor_with_default :log_level, 0
       alias_method :force?, :force
       
@@ -17,6 +18,10 @@ module Dis
           opts.separator "Main options:"
           opts.on '-d', '--working-directory DIR', "Directory where Dis will store fetched code, tasks status ... Default to /tmp/dis/" do |dir|
             Dis::Config.working_directory = dir
+          end
+          
+          opts.on '-l', '--log-directory DIR', "Directory where Dis will write integartion logs. -l - to log to STDOUT." do |dir|
+            Dis::Config.log_directory = dir
           end
           
           opts.on '-f', '--force', "Excecute tasks even if there is no changes until last run" do

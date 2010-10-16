@@ -39,7 +39,7 @@ module Dis
       lock.acquire! do
         if repository.fetch! or Dis::Config.force? # new commits
           tasks.each do |task|
-            info "perform #{task.indentifier}"
+            info "perform #{task.identifier}"
             notify!(task.perform!)
             task.finalize!
           end

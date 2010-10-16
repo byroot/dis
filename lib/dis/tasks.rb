@@ -11,11 +11,13 @@ module Dis
   
     class Base
       
+      include Dis::Tools::Logger::Delegation
+      
       attr_reader :project, :options
       
-      def initialize(project, options={})
+      def initialize(project, *flags)
         @project = project
-        @options = options
+        @options = flags.extract_options!.merge(Hash[flags.map{ |f| [f, true]}])
       end
       
       def perform!

@@ -6,7 +6,7 @@ module Dis
       
       def initialize(project)
         @project = project
-        @logger = ActiveSupport::BufferedLogger.new(File.join(log_path, "#{project.name}.log"), Dis::Config.log_level)
+        @logger = ActiveSupport::BufferedLogger.new(log_file, Dis::Config.log_level)
       end
       
       %w(debug info warn error fatal).each do |method|
@@ -21,8 +21,12 @@ module Dis
         Time.now.strftime('%Y-%m-%d %H:%M:%S')
       end
       
+      def log_file
+        Dis::Config.log_directory == '-' ? STDOUT : File.join(log_path, "#{project.name}.log")
+      end
+      
       def log_path
-        @log_path ||= returning File.join(Dis::Config.working_directory, 'log') do |path|
+        @log_path ||= returning Dis::Config.log_directory do |path|
           FileUtils.mkdir_p path
         end
       end
