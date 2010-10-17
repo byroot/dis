@@ -9,7 +9,6 @@ module Dis
       attr_accessor_with_default :force, false
       attr_accessor_with_default(:log_directory) { @log_directory ||= File.join(working_directory, 'log') }
       attr_accessor_with_default :log_level, 0
-      alias_method :force?, :force
       
       def parser
         @parser ||= OptionParser.new do |opts|
