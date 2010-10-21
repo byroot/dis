@@ -17,7 +17,12 @@ module Dis
       end
       
       def build_report(status, stdout)
-        super(status.success? ? success_title : failure_title, stdout)
+        title = if status.is_a?(String)
+          status
+        else
+          status.success? ? success_title : failure_title
+        end
+        super(title, stdout)
       end
       
       def success_title

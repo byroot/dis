@@ -1,9 +1,8 @@
 module Dis
   module Tasks
     
-    class Nose < Dis::Tasks::Base
+    class Nose < Dis::Tasks::Shell
       
-      include Dis::Tools::Shell
       include Dis::Tasks::NotifyOnce
       
       def command
@@ -21,24 +20,6 @@ module Dis
             args << "--cover-package=#{[coverage[:package]].flatten.map(&:to_s).join(',')}"
           end
         end
-      end
-      
-      def perform!
-        cd @project.source_path do
-          build_report(execute! command)
-        end
-      end
-      
-      def build_report(stdout)
-        Dis::Report.new($?.success? ? success_title : failure_title, stdout) unless muted?
-      end
-      
-      def success_title
-        "#{command} executed successfully !"
-      end
-      
-      def failure_title
-        "#{command} failed !"
       end
       
     end

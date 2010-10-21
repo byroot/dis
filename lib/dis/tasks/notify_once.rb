@@ -9,7 +9,7 @@ module Dis
       
       def build_report(status, stdout)
         previous_build_successful, self.last_build_successful = last_build_successful, status.success?
-        return super unless status.success?
+        return unless status.success?
         super(build_fixed_message, stdout) if status.success? && !previous_build_successful
       end
       
