@@ -57,8 +57,10 @@ module Dis
       @logger ||= Dis::Tools::Logger.new(self)
     end
     
-    def notify!(report)
-      notifier.deliver!(report)
+    def notify!(reports)
+      [reports].flatten.compact.each do |report|
+        notifier.deliver!(report)
+      end
     end
     
     def data_path

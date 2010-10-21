@@ -13,6 +13,28 @@ module Dis
       
       include Dis::Tools::Logger::Delegation
       
+      class << self
+        
+        def persistant_attr_accessor(sym)
+          class_eval <<-EOS
+          
+          def #{sym}
+            store[:#{sym}]
+          end
+          
+          def #{sym}?
+            store[:#{sym}].present?
+          end
+          
+          def #{sym}=(value)
+            store[:#{sym}] = value
+          end
+          
+          EOS
+        end
+        
+      end
+      
       attr_reader :project, :options
       
       def initialize(project, *flags)
@@ -21,7 +43,16 @@ module Dis
       end
       
       def perform!
+        report = self.run!
+        return report unless self.muted?
+      end
+      
+      def run!
         raise NotImplementedError
+      end
+      
+      def build_report(title, body)
+        Dis::Report.new(title, body)
       end
       
       def muted?
