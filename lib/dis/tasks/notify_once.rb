@@ -9,8 +9,14 @@ module Dis
       
       def build_report(status, stdout)
         previous_build_successful, self.last_build_successful = last_build_successful, status.success?
-        return unless status.success?
-        super(build_fixed_message, stdout) if status.success? && !previous_build_successful
+        if !Dis::Config.force && last_build_successful && previous_build_successful
+          return
+        end
+        if last_build_successful && !previous_build_successful
+          super(build_fixed_message, stdout)
+        else
+          super
+        end
       end
       
       def build_fixed_message
